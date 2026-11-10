@@ -45,7 +45,8 @@ final class ChatViewModel {
     func send(_ text: String? = nil) async {
         let message = (text ?? draft).trimmingCharacters(in: .whitespacesAndNewlines)
         guard !message.isEmpty, !isSending else { return }
-        draft = ""
+        // Sending explicit text (e.g. a suggestion) must not throw away what the user has typed.
+        if text == nil { draft = "" }
         messages.append(ChatMessage(role: .user, text: message))
         isSending = true
 
